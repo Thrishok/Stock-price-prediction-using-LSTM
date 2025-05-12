@@ -1,0 +1,17 @@
+# Use Python base image
+FROM python:3.9-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy all files from your project
+COPY . /app
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose port Flask runs on
+EXPOSE 5000
+
+# Set default command
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "sample:app"]

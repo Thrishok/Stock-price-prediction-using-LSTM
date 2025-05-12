@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Price Predictor</title>
+</head>
+<body>
+    <h2>Stock Price Predictor</h2>
+    <form id="predictForm">
+        <label for="openPrice">Enter Open Price:</label>
+        <input type="number" step="0.01" id="openPrice" name="openPrice" required>
+        <button type="submit">Predict</button>
+    </form>
+    <h3 id="result"></h3>
+
+    <script>
+        document.getElementById("predictForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const openPrice = parseFloat(document.getElementById("openPrice").value);
+
+            fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ "Open": openPrice })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = 
+                    "Predicted Close Price: " + data.predicted_close.toFixed(2);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                document.getElementById("result").innerText = "Prediction failed.";
+            });
+        });
+    </script>
+</body>
+</html>
